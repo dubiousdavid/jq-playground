@@ -1,0 +1,10 @@
+[
+  {"score": null, "name": "Billy", "active": false},
+  {"score": 90, "name": "Bobby", "active": true},
+  {"name": "Timmy", "active": false},
+  {
+    "score": 100,
+    "name": "Tommy",
+    "active": true
+  }
+]
