@@ -10,6 +10,8 @@ jq '.[].parents[].sha' commits.json
 jq '.[].commit.author | select(.email | test("gmail.com$"))' commits.json
 # endswith
 jq '.[].commit.author | select(.email | endswith("gmail.com"))' commits.json
+# variables/destructuring
+jq '.[] | (.commit.author | select(.email | endswith("gmail.com"))) as {$name, $email} | {sha, $name, $email}' commits.json
 # Spread multiple values into array
 jq '[.[].commit.author.name]' commits.json
 # map
