@@ -1,21 +1,3 @@
-# Filter by equality
-jq '.[].commit.author | select(.email == "riley.avron@gmail.com") | .name' commits.json
-# Filter by inequality
-jq '.[].commit | select(.comment_count > 0) | {message, comment_count}' commits.json
-# Boolean operators
-jq '.[].commit | select(.comment_count > 0 and .verification.verified)' commits.json
-# Drill into arrays
-jq '.[].parents[].sha' commits.json
-# Filter by regex
-jq '.[].commit.author | select(.email | test("gmail.com$"))' commits.json
-# endswith
-jq '.[].commit.author | select(.email | endswith("gmail.com"))' commits.json
-# variables/destructuring
-jq '.[] | (.commit.author | select(.email | endswith("gmail.com"))) as {$name, $email} | {sha, $name, $email}' commits.json
-# Spread multiple values into array
-jq '[.[].commit.author.name]' commits.json
-# map
-jq 'map(.commit.author.name)' commits.json
 # Object construction
 jq '.[].commit.author | {fullName: .name}' commits.json
 # Shorthand object construction
@@ -42,10 +24,14 @@ jq '.[] | select(has("score")) | .name' scores.json
 jq '.[] | .score // 0 | if . == 0 then 50 else . end' scores.json
 # path, type
 jq 'path(.. | select(type=="number"))' scores.json
-# path to a particular value
-jq 'path(.. | select(. == "riley.avron@gmail.com"))' commits.json
 # built-in select fns: arrays, objects, strings, numbers, values, scalars
 jq 'path(.. | numbers)' scores.json
+# path to a particular value
+jq 'path(.. | select(. == "riley.avron@gmail.com"))' commits.json
+# Spread multiple values into array
+jq '[.[].commit.author.name]' commits.json
+# map
+jq 'map(.commit.author.name)' commits.json
 # add
 jq 'map(.score) | add' scores.json
 # any
@@ -56,3 +42,17 @@ jq 'all(.score > 95)' scores.json
 jq 'map(.score) | sort' scores.json
 # sorty_by
 jq 'sort_by(.score)' scores.json
+# Filter by equality
+jq '.[].commit.author | select(.email == "riley.avron@gmail.com") | .name' commits.json
+# Filter by inequality
+jq '.[].commit | select(.comment_count > 0) | {message, comment_count}' commits.json
+# Boolean operators
+jq '.[].commit | select(.comment_count > 0 and .verification.verified)' commits.json
+# Drill into arrays
+jq '.[].parents[].sha' commits.json
+# Filter by regex
+jq '.[].commit.author | select(.email | test("gmail.com$"))' commits.json
+# endswith
+jq '.[].commit.author | select(.email | endswith("gmail.com"))' commits.json
+# variables/destructuring
+jq '.[] | (.commit.author | select(.email | endswith("gmail.com"))) as {$name, $email} | {sha, $name, $email}' commits.json
