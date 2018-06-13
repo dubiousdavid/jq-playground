@@ -42,6 +42,26 @@ jq 'all(.score > 95)' scores.json
 jq 'map(.score) | sort' scores.json
 # sorty_by
 jq 'sort_by(.score)' scores.json
+# slice (first two elements)
+jq '.[:2]' scores.json
+# slice (skip first element)
+jq '.[1:]' scores.json
+# slice (last two elements)
+jq '.[-2:]' scores.json
+# slice (middle element)
+jq '(length / 2 | floor) as $middle | .[$middle:($middle + 1)]' scores.json
+# + (add numbers)
+jq '10 + .[1].score' scores.json
+# + (concatenate strings)
+jq '"foo" + "bar"' scores.json
+# + (concatenate arrays)
+jq '[1,2,3] + [4,5,6]' scores.json
+# + (merge objects non-recursively)
+jq '.[] | .commit.author + .author' commits.json
+# - (subtract arrays)
+jq '([.. | .email? | values] | unique) - ["nico@cryptonector.com"]' commits.json
+# / (split strings)
+jq '.[].commit.author.date / "T"' commits.json
 # Filter by equality
 jq '.[].commit.author | select(.email == "riley.avron@gmail.com") | .name' commits.json
 # Filter by inequality
