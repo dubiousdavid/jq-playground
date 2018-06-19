@@ -62,6 +62,8 @@ jq '.[] | .commit.author + .author' commits.json
 jq '([.. | .email? | values] | unique) - ["nico@cryptonector.com"]' commits.json
 # / (split strings)
 jq '.[].commit.author.date / "T"' commits.json
+# select
+jq 'map(select(.score >= 90))' scores.json
 # Filter by equality
 jq '.[].commit.author | select(.email == "riley.avron@gmail.com") | .name' commits.json
 # Filter by inequality
@@ -70,9 +72,13 @@ jq '.[].commit | select(.comment_count > 0) | {message, comment_count}' commits.
 jq '.[].commit | select(.comment_count > 0 and .verification.verified)' commits.json
 # Drill into arrays
 jq '.[].parents[].sha' commits.json
+# del
+jq '.[].commit.author | del(.date)' commits.json
 # Filter by regex
 jq '.[].commit.author | select(.email | test("gmail.com$"))' commits.json
 # endswith
 jq '.[].commit.author | select(.email | endswith("gmail.com"))' commits.json
 # variables/destructuring
 jq '.[] | (.commit.author | select(.email | endswith("gmail.com"))) as {$name, $email} | {sha, $name, $email}' commits.json
+# arg input
+jq --arg email "riley.avron@gmail.com" '.[].commit.author | select(.email == $email) | .name' commits.json
